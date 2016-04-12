@@ -6,8 +6,8 @@ import re
 import requests
 
 
-def get_account_info():
-    account_file = open('account.txt', 'r')
+def get_account_info(file_path='./account.txt'):
+    account_file = open(file_path, 'r')
     account_id, account_password = account_file.read().split(',', 2)
     account_file.close()
 
