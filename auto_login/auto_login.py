@@ -1,6 +1,7 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import re
 
 import requests
@@ -8,7 +9,7 @@ import requests
 import notifier
 
 
-def get_account_info(file_path='../account.txt'):
+def get_account_info(file_path):
     account_file = open(file_path, 'r')
     account_id, account_password = account_file.read().split(',', 2)
     account_file.close()
@@ -36,7 +37,8 @@ def is_login_success(login_response):
 
 
 if __name__ == '__main__':
-    response = get_login_response(*get_account_info())
+    account_path = os.path.join(os.path.dirname(__file__), 'account.txt')
+    response = get_login_response(*get_account_info(account_path))
 
     if is_login_success(response):
         notifier.send_message(u'쿨엔조이 로그인 성공 : ' + re.search(u'(\d+) 점수', response.text).group(1) + u'포인트')
