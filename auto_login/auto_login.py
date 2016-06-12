@@ -21,8 +21,8 @@ def get_login_response(account_id, account_password):
     form_data = {'url': 'http%3A%2F%2Fwww.coolenjoy.kr', 'mb_id': account_id, 'mb_password': account_password}
     login_response = requests.post('http://www.coolenjoy.kr/login_check', allow_redirects=False, data=form_data)
 
-    if login_response.cookies:
-        cookies = dict(PHPSESSID=login_response.cookies['PHPSESSID'])
+    if login_response.cookies.get('PHPSESSID'):
+        cookies = dict(PHPSESSID=login_response.cookies.get('PHPSESSID'))
 
         return requests.get('http://www.coolenjoy.kr', cookies=cookies)
     else:
