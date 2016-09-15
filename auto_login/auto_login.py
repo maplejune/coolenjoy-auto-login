@@ -1,12 +1,8 @@
-# !/usr/bin/env python
-# -*- coding: utf-8 -*-
-
+# coding=utf-8
 import os
 import re
 
 import requests
-
-import notifier
 
 
 def get_account_info(file_path):
@@ -36,11 +32,14 @@ def is_login_success(login_response):
         return False
 
 
-if __name__ == '__main__':
+def lambda_handler(event, context):
     account_path = os.path.join(os.path.dirname(__file__), 'account.txt')
     response = get_login_response(*get_account_info(account_path))
 
     if is_login_success(response):
-        notifier.send_message(u'쿨엔조이 로그인 성공 : ' + re.search(u'총점:(\d+),', response.text).group(1) + u'포인트')
+        current_point = re.search(u'총점:(\d+),', response.text).group(1)
+
+        print u'Current point : ' + current_point
+        return current_point
     else:
-        notifier.send_message(response.text)
+        raise Exception(response.text)
